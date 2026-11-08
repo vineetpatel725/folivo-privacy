@@ -5,7 +5,7 @@ description: What Folivo does and does not do with your data.
 
 # Folivo Privacy Policy
 
-**Effective date:** October 18, 2026
+**Effective date:** October 24, 2026
 **App:** Folivo (`com.folivo.folivo`)
 **Platform:** Android
 
@@ -21,7 +21,7 @@ This policy explains, plainly, what Folivo does and does not do with your data. 
 - **The internet is used for one thing, a download.** The first time you choose a language for "Recognize text" (English or Hindi) and tap Done, Folivo downloads that language's reading model — about 8 MB — once. That is the only request the app makes on its own, and no part of any document, and no text read from one, is ever sent with it. Every typeface the editor offers is built into the app, so choosing a font never uses the network.
 - **No document ever leaves your device by itself.** Viewing, scanning, merging, compressing, converting, rotating, marking up and signing all run locally, offline, with no network involved.
 - **No analytics, no advertising, no tracking.** There is no analytics SDK, no advertising SDK and no crash-reporting service in the app.
-- **The camera is used only to scan paper, and is asked for only when you first tap Scan.** The pictures stay on your device (a scan you save as JPG pictures also appears in your phone's Gallery — see section 4). No microphone. No location. No contacts.
+- **The camera is used only to scan paper, and is asked for only when you first tap Scan.** The pictures stay on your device (a scan you save as JPG pictures also appears in your phone's Gallery — see section 4). Folivo never records sound and has no microphone permission. No location. No contacts.
 - **"Recognize text" reads your scan on your phone.** Turning it on makes the PDF searchable by adding the words it reads as an invisible layer inside the same file. The reading is done by a program inside Folivo; the words are never sent anywhere.
 - **Files Folivo saves say that Folivo saved them, and when.** See section 5.
 - **Anything that leaves the app, you send yourself** — sharing a document, printing it, or using "Send feedback", which hands a redacted log to your own email app for you to review and send.
@@ -47,6 +47,7 @@ Folivo opens and edits your documents — that is what it is for — but nothing
 - Microphone input. ("Read aloud" is text-to-speech *playback*; nothing is recorded.)
 - Advertising identifiers, usage analytics or tracking data of any kind.
 - Crash reports. There is no crash-reporting service in this release.
+- Your phone's storage size. Settings asks Android for it (no permission is needed) only to show how much of the phone your documents take; it is not kept or sent.
 
 The only thing that goes out is the download described in section 4 — a text-recognition model for a language. It is a request for a fixed file at a fixed address and carries nothing else about you or your files.
 
@@ -59,7 +60,7 @@ permissions:
 
 | Permission | What it is for |
 | --- | --- |
-| `MANAGE_EXTERNAL_STORAGE` ("All files access") | Lets Folivo create and use its own document folder at the top level of your device's storage. See section 5. |
+| `MANAGE_EXTERNAL_STORAGE` ("All files access") | Lets Folivo create and use its own document folder at the top level of your device's storage, and list the supported documents elsewhere on it for its file browser. See sections 5 and 7. |
 | `INTERNET` | **Downloading text-recognition models, and nothing else.** See below. |
 | `CAMERA` | **Scanning paper, and nothing else.** Asked for only the first time you tap Scan. See below. |
 | `FOREGROUND_SERVICE` | **Keeping "Recognize text" running while the screen is off, and nothing else.** No prompt. See below. |
@@ -109,12 +110,12 @@ other app. On the Play Store listing it appears under *Other* as "full network a
 
 **Please read this part, because the permission sounds broader than what Folivo does with it.**
 
-"All files access" is, technically, a powerful permission — Android grants it as blanket access to shared storage. Folivo uses it for one thing: **creating and managing its own `Folivo` folder** and the documents you put there. Folivo does not browse, index, scan or read the rest of your storage, and has no feature that would do so.
+"All files access" is, technically, a powerful permission — Android grants it as blanket access to shared storage. Folivo uses it for two things: **creating and managing its own `Folivo` folder** and the documents you put there, and listing the names, sizes and dates of the supported documents elsewhere on your storage so that its file browser can show them (see section 7). Folivo does not open or read the other files on your storage, and finding those documents opens no file and changes nothing.
 
-**This permission is not what lets files into the app.** Opening a document needs no permission at all:
+**This permission is not what lets files into the app from other apps.** Opening a document that way needs no permission at all:
 
 - Sharing a file to Folivo, or "Open with", passes that one file to Folivo with a temporary read grant from Android.
-- Picking a file uses Android's own system file picker, and picking pictures uses Android's own Photo Picker. Both hand over only what you select, and neither needs a permission. The file picker is told which kinds of file Folivo can open, so it lists only those.
+- Picking a file opens Folivo's own file browser, which lists the supported documents it found on your phone (see above) and passes on only the ones you choose. Its "Other apps" button opens Android's own system file picker instead, and picking pictures uses Android's own Photo Picker. Both of those hand over only what you select, and neither needs a permission. The system file picker is told which kinds of file Folivo can open, so it lists only those.
 
 When a document comes in this way, Folivo keeps its own copy in its `Folivo/Documents` folder so that it is part of your library; the original stays where it was. See section 5.
 
@@ -150,7 +151,8 @@ Your documents live in a folder named **`Folivo`** at the top level of your devi
 ```
 /storage/emulated/0/Folivo/
 ├── Documents/   your document library, and anything you convert or compress
-├── Images/      pages exported with Convert → Images
+├── Images/      pages exported with Convert → Images, and photos you resize
+                 with Resize photo
 ├── Scans/       documents created with "Scan paper" (a PDF, or JPG pictures)
 └── .trash/      anything you have deleted, until it is purged (section 6)
                  (kept under Documents/, Images/ or Scans/ to match where
@@ -158,10 +160,12 @@ Your documents live in a folder named **`Folivo`** at the top level of your devi
 ```
 
 Everything Folivo produces goes into one of these. When you convert a document
-to images, the pages land in `Images/`; a scan lands in `Scans/`; everything
-else — a converted, compressed, merged, signed or marked-up file — lands in
-`Documents/` next to your library. Folivo does not write your files anywhere
-else on your device.
+to images, the pages land in `Images/`, and so does a photo you resize; a scan
+lands in `Scans/`; everything else — a converted, compressed, merged, signed or
+marked-up file — lands in `Documents/` next to your library. Folivo does not
+write your files anywhere else on your device, except the copies you ask for:
+a scan saved as JPG pictures also appears in your Gallery (section 4), and
+**Save to Photos** (below).
 
 **A document you open from elsewhere is copied in.** When a file reaches Folivo
 through "Open with", sharing, or the file picker, Folivo copies it into
@@ -201,6 +205,29 @@ your phone was set to. That is all that is written: **no device name, no account
 no location, nothing else about you** — because Folivo holds none of those to
 write.
 
+### Photos you resize
+
+**Tools → Resize photo** makes a smaller copy of one photo or signature so it
+fits the size limit of a job or exam form. It runs entirely on your phone. You
+pick the photo with Android's Photo Picker (no permission); Folivo works on a
+copy of it, and **your original is never changed**. The result is a new JPG
+saved in `Folivo/Images/`, named after the photo and the limit (for example
+`photo_30KB.jpg`), and it appears in your library.
+
+- **Nothing hidden is kept in the result.** The new file has no GPS location,
+  no camera or phone model, no date taken, no thumbnail and no colour profile
+  — only the plain picture. Folivo's mark (above) is **not** written into it;
+  for a picture it is recorded in Folivo's own library only.
+- **The name and date you add on a strip are not saved anywhere.** They exist
+  only while the screen is open and in the picture itself; they are not kept in
+  Folivo's settings, library, diagnostic log or any file name.
+- **Save to Photos is optional and only happens when you tap it.** It puts one
+  extra copy of the result into your phone's Gallery, in a folder called
+  `Pictures/Folivo`, so photo apps — and any photo backup you have switched
+  on — can see it. It needs no permission. Folivo does nothing with that copy
+  afterwards, and deleting it from the Gallery does not delete the file in
+  `Folivo/Images/`.
+
 ### Comments you add to Word documents
 
 If you write a comment on a Word document, Folivo asks once for the name to show
@@ -232,13 +259,15 @@ What is removed, and what is kept:
 | Kept on your device after uninstall | Removed on uninstall |
 | --- | --- |
 | `Folivo/Documents/` — your documents, including the copies of files you opened from elsewhere | The library index (which documents you have, where you were reading, when you last opened each, which are bookmarked) |
-| `Folivo/Images/` — pages you exported as images | Your saved signatures |
+| `Folivo/Images/` — pages you exported as images, and photos you resized | Your saved signatures |
 | `Folivo/Scans/` — your scans | App settings and preferences, including the name you use on Word comments |
 | `Folivo/.trash/` — anything deleted but not yet purged | Notes you wrote for presentation slides |
+| `Pictures/Folivo/` — any copy you saved with Save to Photos | Your recent searches |
 | | The diagnostic log |
 | | Thumbnail and working-file caches |
 | | Edits staged but never saved, and an unfinished scan |
 | | Text-recognition models downloaded for a language, and the working files of a scan being made searchable |
+| | How often you have used each tool |
 
 Two things follow that you should know:
 
@@ -253,10 +282,13 @@ If you want everything gone, delete the `Folivo` folder with a file manager afte
 
 Beyond your documents, Folivo keeps the following **locally, and only locally**:
 
-- **A library index** — the list of your documents, their locations, your reading position, when you last opened each one, and which you have bookmarked. Stored in the app's own private settings storage, not in a cloud. Alongside it, a list of what is in the trash and when each item was moved there.
+- **A library index** — the list of your documents, their locations, your reading position, when you last opened each one, when each was added to Folivo, and which you have bookmarked. Stored in the app's own private settings storage, not in a cloud. Alongside it, a list of what is in the trash and when each item was moved there.
+- **A list of the documents Folivo found on your phone** — Folivo keeps a list of the names, sizes and dates of the supported documents it found on your phone (finding them opens no file and changes nothing), stored only on your phone in the app's private storage and removed on uninstall, used only to show the file browser and never sent anywhere.
 - **Your saved signatures** — when you draw, type or upload a signature in the Sign feature, Folivo can save it so you can reuse it. **Up to five signatures** are kept, in the app's private settings storage: a drawn signature as its pen strokes, a typed one as the text and the font, an uploaded one as the picture. Folivo also remembers which one is your default. They are never transmitted. You can delete any saved signature from the Signatures screen, and all of them are removed when you uninstall.
-- **App settings** — theme, reader preferences, whether the app lock is on, the language you last chose for "Recognize text", and the name you use on Word comments, if you have given one.
+- **App settings** — theme, reader preferences, whether the app lock is on and how soon it locks again, the language you last chose for "Recognize text", and the name you use on Word comments, if you have given one.
 - **Slide notes** — notes you write for the slides of a presentation, kept against that document in the app's private settings storage.
+- **Your recent searches** — the words of your last six searches on Home's search screen, so you can run one again with one tap. A search is kept when you press the keyboard's search key, when you open a document from its results, or when you leave a search (going back, or clearing the box) that found something. Only the words are kept: not what they found and not which document you opened. They are in the app's private settings storage; you can remove one with its ×, or all of them with "Clear all", on the search screen.
+- **How often you use each tool** — a count of how many times you have started each tool from the Tools tab, so the tab can show the four you use most at the top. Only the tool and the number are kept: not which document, and not when. They are in the app's private settings storage, never sent anywhere, and removed on uninstall.
 - **A diagnostic log** — recent app events, kept to help troubleshoot problems. See section 8.
 - **Text-recognition models** — the model for each language you have used (English, Hindi), saved in the app's private storage so it is downloaded once. While a scan is being made searchable, its page pictures and the words read so far are kept there too, and deleted when it finishes (or, if it does not succeed, when you retry or next open the app).
 - **An unfinished scan** — the pictures of a scan you have not yet saved or discarded, kept in the app's cache so you can carry on with it.
@@ -296,9 +328,9 @@ Folivo then hands the file to **your own email app**, pre-addressed to `info.fol
 
 ---
 
-## 10. When you hand a document to another app
+## 10. When you hand something to another app
 
-Some features pass your document, or part of it, to another app on your phone — always because you asked for it:
+Some features pass your document, part of it, or what you are asking for, to another app on your phone — always because you asked for it:
 
 - **Copy** — puts the text you selected on the system clipboard, where any app you paste into can read it. On some Android versions other apps can read the clipboard without being pasted into.
 - **Share** — sends the document to whatever app you pick from Android's share sheet.
@@ -313,7 +345,7 @@ Once a document reaches another app, it is governed by *that* app's privacy prac
 
 ## 11. Protecting the app itself
 
-Folivo offers an optional **app lock**, which requires your phone's own unlock — PIN, pattern, password or biometric — before the app opens.
+Folivo offers an optional **app lock**, which requires your phone's own unlock — PIN, pattern, password or biometric — before the app opens, and again when you come back to it after the time you choose under Settings → Auto-lock threshold: straight away, or after 1, 5 or 15 minutes away (5 unless you change it). "Straight away" includes coming back from the screens Folivo hands you to, such as the photo picker or the share sheet.
 
 **Folivo never sees or handles your credential.** It asks Android to show the system's own confirm-credential screen, and Android tells Folivo only whether the unlock succeeded. No fingerprint, face or passcode data ever reaches the app. This needs no permission.
 
@@ -371,6 +403,7 @@ Keep your device's operating system current and use a screen lock.
 - **Delete a document** — moves it to the trash inside the `Folivo` folder, where it is permanently deleted after 30 days.
 - **Empty the trash** — permanently deletes those files from your device straight away.
 - **Delete a saved signature** — from the Signatures screen, at any time.
+- **Forget your recent searches** — on the search screen, one at a time with its ×, or all with "Clear all".
 - **Clear the diagnostic log** — from Settings → Send feedback.
 - **Remove everything** — uninstall the app, then delete the `Folivo` folder with any file manager.
 
